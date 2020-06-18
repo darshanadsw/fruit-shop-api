@@ -4,11 +4,9 @@ import com.fruitshop.api.fruitshopapi.domain.dto.CustomerDto;
 import com.fruitshop.api.fruitshopapi.domain.dto.CustomerDtoList;
 import com.fruitshop.api.fruitshopapi.service.CustomerService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
@@ -32,4 +30,27 @@ public class CustomerController {
         }
     }
 
+    @PostMapping
+    public ResponseEntity<CustomerDto> saveCustomer(@RequestBody CustomerDto customerDto){
+        return ResponseEntity.status(HttpStatus.CREATED)
+            .body(customerService.saveCustomer(customerDto));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<CustomerDto> updateCustomer(@PathVariable Integer id,@RequestBody CustomerDto customerDto){
+        try{
+            return ResponseEntity.ok(customerService.updateCustomer(id,customerDto));
+        }catch (RuntimeException e){
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<CustomerDto> patchCustomer(@PathVariable Integer id,@RequestBody CustomerDto customerDto){
+        try{
+            return ResponseEntity.ok(customerService.patchCustomer(id,customerDto));
+        }catch (RuntimeException e){
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

@@ -43,7 +43,7 @@ class CustomerServiceTest {
         List<CustomerDto> result = customerService.getAllCustomers();
 
         assertNotNull(result);
-        assertEquals(2,result.size());
+        assertEquals(5,result.size());
     }
 
     @Test
@@ -67,5 +67,14 @@ class CustomerServiceTest {
         });
         assertNotNull(ex);
         assertEquals("No Customer found",ex.getMessage());
+    }
+
+    @Test
+    void saveCustomer() {
+        CustomerDto customerDto = new CustomerDto();
+        customerDto.setFirstName("Darshana");
+        customerDto.setLastName("Welikala");
+        CustomerDto result = customerService.saveCustomer(customerDto);
+        assertNotNull(result.getId());
     }
 }
