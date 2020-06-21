@@ -17,8 +17,8 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.mockito.BDDMockito.willDoNothing;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -79,5 +79,13 @@ class CustomerControllerTest {
             .andExpect(jsonPath("$.firstName",is("Darshana")))
             .andExpect(jsonPath("$.lastName",is("Welikala")))
             .andExpect(status().isCreated());
+    }
+
+    @Test
+    void deleteCustomer() throws Exception {
+        willDoNothing().given(customerService).deleteCustomer(anyInt());
+
+        mvc.perform(delete("/api/v1/customers/2"))
+            .andExpect(status().isOk());
     }
 }

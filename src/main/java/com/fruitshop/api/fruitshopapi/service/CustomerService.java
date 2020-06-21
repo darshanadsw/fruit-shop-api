@@ -60,4 +60,8 @@ public class CustomerService {
         }).orElseThrow(RuntimeException::new);
         return null;
     }
+
+    public void deleteCustomer(Integer id){
+        customerRepository.deleteById(id);
+    }
 }
