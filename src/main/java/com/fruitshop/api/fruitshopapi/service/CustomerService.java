@@ -31,8 +31,7 @@ public class CustomerService {
     public CustomerDto saveCustomer(CustomerDto customerDto){
         Customer customer = customerMapper.toDomain(customerDto);
         customerRepository.save(customer);
-        customerDto.setId(customer.getId());
-        return customerDto;
+        return customerMapper.toDto(customer);
     }
 
     public CustomerDto updateCustomer(Integer id,CustomerDto customerDto){

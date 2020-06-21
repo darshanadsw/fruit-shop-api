@@ -1,6 +1,7 @@
 package com.fruitshop.api.fruitshopapi.domain.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fruitshop.api.fruitshopapi.validators.DateValidator;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,12 +26,8 @@ public class CustomerDto {
     @Size(max = 10,message = "Last name should not be grater than 10 character")
     private String lastName;
 
-
+    @DateValidator(pattern = "yyyyMMdd", message = "Invalid birth date")
     private String birthDate;
-
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date test;
-
 
     @JsonProperty("customer_url")
     private String customerUrl;
