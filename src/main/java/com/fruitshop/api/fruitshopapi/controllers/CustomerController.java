@@ -6,7 +6,12 @@ import com.fruitshop.api.fruitshopapi.service.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.Map;
 
 
 @RestController
@@ -31,18 +36,14 @@ public class CustomerController {
     }
 
     @PostMapping
-    public ResponseEntity<CustomerDto> saveCustomer(@RequestBody CustomerDto customerDto){
+    public ResponseEntity<CustomerDto> saveCustomer(@Valid @RequestBody CustomerDto customerDto){
         return ResponseEntity.status(HttpStatus.CREATED)
             .body(customerService.saveCustomer(customerDto));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<CustomerDto> updateCustomer(@PathVariable Integer id,@RequestBody CustomerDto customerDto){
-        try{
-            return ResponseEntity.ok(customerService.updateCustomer(id,customerDto));
-        }catch (RuntimeException e){
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok(customerService.updateCustomer(id,customerDto));
     }
 
     @PatchMapping("/{id}")
@@ -52,5 +53,26 @@ public class CustomerController {
         }catch (RuntimeException e){
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @ExceptionHandler({MethodArgumentNotValidException.class,RuntimeException.class})
+    public ResponseEntity<Map<String,String>> handleValidation(Exception e){
+        Map<String, String> errors = new HashMap<>();
+        ResponseEntity<Map<String,String>> responseEntity;
+        if(e instanceof MethodArgumentNotValidException){
+            MethodArgumentNotValidException methodArgumentNotValidException
+                    = (MethodArgumentNotValidException)e;
+            methodArgumentNotValidException.getBindingResult().getFieldErrors()
+                    .forEach(o ->
+                        errors.put(o.getField(),o.getDefaultMessage())
+                    );
+            responseEntity = ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(errors);
+        } else {
+            responseEntity = ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .build();
+        }
+        return responseEntity;
     }
 }

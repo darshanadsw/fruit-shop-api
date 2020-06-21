@@ -14,6 +14,12 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -35,8 +41,9 @@ class CustomerServiceTest {
 
     @Test
     void getAllCustomers() {
-        Customer c1 = new Customer("Darshana","Welikala");
-        Customer c2 = new Customer("Hasaru","Welikala");
+
+        Customer c1 = new Customer("Darshana","Welikala",Date.from(LocalDate.of(1982,4,21).atStartOfDay(ZoneId.systemDefault()).toInstant()));
+        Customer c2 = new Customer("Hasaru","Welikala",Date.from(LocalDate.of(2014,4,9).atStartOfDay(ZoneId.systemDefault()).toInstant()));
         customerRepository.save(c1);
         customerRepository.save(c2);
 
@@ -48,8 +55,8 @@ class CustomerServiceTest {
 
     @Test
     void findCustomerById() {
-        Customer c1 = new Customer("Darshana","Welikala");
-        Customer c2 = new Customer("Hasaru","Welikala");
+        Customer c1 = new Customer("Darshana","Welikala",Date.from(LocalDate.of(1982,4,21).atStartOfDay(ZoneId.systemDefault()).toInstant()));
+        Customer c2 = new Customer("Hasaru","Welikala",Date.from(LocalDate.of(2014,4,9).atStartOfDay(ZoneId.systemDefault()).toInstant()));
         customerRepository.save(c1);
         customerRepository.save(c2);
 

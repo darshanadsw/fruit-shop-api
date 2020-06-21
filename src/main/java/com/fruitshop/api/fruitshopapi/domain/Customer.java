@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.util.Date;
 
 @Data
 @Entity
@@ -19,9 +20,11 @@ public class Customer {
 
     private String firstName;
     private String lastName;
+    private Date bDate;
 
-    public Customer(String firstName, String lastName) {
+    public Customer(String firstName, String lastName,Date bDate) {
         this.firstName = firstName;
         this.lastName = lastName;
+        this.bDate = bDate;
     }
 }
