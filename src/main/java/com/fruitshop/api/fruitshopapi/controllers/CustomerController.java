@@ -3,6 +3,7 @@ package com.fruitshop.api.fruitshopapi.controllers;
 import com.fruitshop.api.fruitshopapi.domain.dto.CustomerDto;
 import com.fruitshop.api.fruitshopapi.domain.dto.CustomerDtoList;
 import com.fruitshop.api.fruitshopapi.service.CustomerService;
+import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 
+@Api(value = "Customer API", tags = {"customers"})
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/customers")
@@ -18,11 +20,20 @@ public class CustomerController {
 
     private final CustomerService customerService;
 
+    @ApiOperation(value = "List all customers",notes = "List all customers", tags = {"customers"})
+    @ApiResponses({
+            @ApiResponse(code = 200,message = "Successful fetch of all customers"),
+            @ApiResponse(code = 500, message = "Backend server error")})
     @GetMapping
     public ResponseEntity<CustomerDtoList> getAllCustomers(){
         return ResponseEntity.ok(new CustomerDtoList(customerService.getAllCustomers()));
     }
 
+    @ApiOperation(value = "Show a customer by his id" , tags = {"customers"})
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Successful fetch of customer by id"),
+            @ApiResponse(code = 500, message = "Backend server error")
+    })
     @GetMapping("/{id}")
     public ResponseEntity<CustomerDto> findCustomerById(@PathVariable Integer id){
         try{
